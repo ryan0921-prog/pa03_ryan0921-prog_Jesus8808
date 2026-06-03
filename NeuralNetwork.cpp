@@ -62,6 +62,57 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
     // Use visitPredictNode and visitPredictNeighbor to handle the neural network math
     // at each step of your traversal.
 
+    //FIRST: loading each input value into its corresponding input node's postActivationValue thingy
+
+    for (int i = 0; i < inputNodeIds.size(); i++) {
+        nodes[inputNodeIds[i]]->postActivationValue = input[i];
+        
+        
+
+    }
+
+    //SECOND: Main implementation of BFT, a majority from lectures or practice quizzess
+
+    queue<int> q;
+    vector <bool> visited(nodes.size(), false); //similar to practice quiz
+
+
+    //unlike the practice quizzes where we set a source as visited immediately, here we are gonna set the input nodes as visited
+    for (int i = 0; i < inputNodeIds.size(); i++) {
+        visited[inputNodeIds[i]] = true;
+        q.push(inputNodeIds[i]);
+        
+    }
+
+    //while the queue is not empty
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        if (!visited[u]) {
+            visitPredictNode(u);
+            visited[u] = true;
+        }
+
+        //using the neighbor loop from practice quizzes but with outgoing connectionss
+
+        for (auto& v: adjacencyList[u]) {
+            Connection& c = v.second; //kind of a shortcut instead of just spamming v.second
+            visitPredictNeighbor(c);
+            if (!visited[c.dest]) {
+                visited[c.dest] = true;
+                q.push(c.dest);
+            }
+
+        }
+    }
+
+
+
+
+
+
+
     vector<double> output;
     for (int i = 0; i < outputNodeIds.size(); i++) {
         int dest = outputNodeIds.at(i);
