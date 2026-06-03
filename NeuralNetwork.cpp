@@ -94,7 +94,7 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
 
         if (!visited[u]) {
             visitPredictNode(u);
-            //visited[u] = true;
+            visited[u] = true;
         }
 
         //using the neighbor loop from practice quizzes but with outgoing connectionss
