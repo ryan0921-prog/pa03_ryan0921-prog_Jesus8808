@@ -68,9 +68,6 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
         nodes[inputNodeIds[i]]->postActivationValue = input[i];
         
         
-        //int inputNodeId = inputNodeIds[i]; //inputNodeId representing one per i
-        //NodeInfo* inputNode = nodes[inputNodeId];  //creating inputNode to implement the corresponding value
-        //inputNode -> postActivationValue = input[i];  //implementation
 
     }
 
