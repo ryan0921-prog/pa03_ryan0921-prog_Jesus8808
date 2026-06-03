@@ -65,9 +65,24 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
     //FIRST: loading each input value into its corresponding input node's postActivationValue thingy
 
     for (int i = 0; i < inputNodeIds.size(); i++) {
-        
+        int inputNodeId = inputNodeIds[i]; //inputNodeId representing one per i
+        NodeInfo* inputNode = nodes[inputNodeId];  //creating inputNode to implement the corresponding value
+        inputNode -> postActivationValue = input[i];  //implementation
 
     }
+
+    //SECOND: Main implementation of BFT, a majority from lectures or practice quizzess
+
+    queue<int> q;
+    vector <bool> visited(nodes.size(), false); //similar to practice quiz
+
+
+    //unlike the practice quizzes where we set a source as visited immediately, here we are gonna set the input nodes as visited
+    
+
+
+
+
 
 
 
