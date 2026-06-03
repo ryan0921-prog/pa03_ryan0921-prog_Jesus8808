@@ -62,6 +62,15 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
     // Use visitPredictNode and visitPredictNeighbor to handle the neural network math
     // at each step of your traversal.
 
+    //FIRST: loading each input value into its corresponding input node's postActivationValue thingy
+
+    for (int i = 0; i < inputNodeIds.size(); i++) {
+        
+
+    }
+
+
+
     vector<double> output;
     for (int i = 0; i < outputNodeIds.size(); i++) {
         int dest = outputNodeIds.at(i);
