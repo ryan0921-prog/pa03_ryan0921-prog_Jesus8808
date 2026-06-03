@@ -65,9 +65,12 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
     //FIRST: loading each input value into its corresponding input node's postActivationValue thingy
 
     for (int i = 0; i < inputNodeIds.size(); i++) {
-        int inputNodeId = inputNodeIds[i]; //inputNodeId representing one per i
-        NodeInfo* inputNode = nodes[inputNodeId];  //creating inputNode to implement the corresponding value
-        inputNode -> postActivationValue = input[i];  //implementation
+        nodes[inputNodeIds[i]]->postActivationValue = input[i];
+        
+        
+        //int inputNodeId = inputNodeIds[i]; //inputNodeId representing one per i
+        //NodeInfo* inputNode = nodes[inputNodeId];  //creating inputNode to implement the corresponding value
+        //inputNode -> postActivationValue = input[i];  //implementation
 
     }
 
@@ -78,7 +81,34 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
 
 
     //unlike the practice quizzes where we set a source as visited immediately, here we are gonna set the input nodes as visited
-    
+    for (int i = 0; i < inputNodeIds.size(); i++) {
+        visited[inputNodeIds[i]] = true;
+        q.push(inputNodeIds[i]);
+        
+    }
+
+    //while the queue is not empty
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        if (!visited[u]) {
+            visitPredictNode(u);
+            //visited[u] = true;
+        }
+
+        //using the neighbor loop from practice quizzes but with outgoing connectionss
+
+        for (auto& v: adjacencyList[u]) {
+            Connection& c = v.second; //kind of a shortcut instead of just spamming v.second
+            visitPredictNeighbor(c);
+            if (!visited[c.dest]) {
+                visited[c.dest] = true;
+                q.push(c.dest);
+            }
+
+        }
+    }
 
 
 
