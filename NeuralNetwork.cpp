@@ -66,9 +66,6 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
 
     for (int i = 0; i < inputNodeIds.size(); i++) {
         nodes[inputNodeIds[i]]->postActivationValue = input[i];
-        
-        
-
     }
 
     //SECOND: Main implementation of BFT, a majority from lectures or practice quizzess
@@ -100,18 +97,11 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
             Connection& c = v.second; //kind of a shortcut instead of just spamming v.second
             visitPredictNeighbor(c);
             if (!visited[c.dest]) {
-                visited[c.dest] = true;
                 q.push(c.dest);
             }
 
         }
     }
-
-
-
-
-
-
 
     vector<double> output;
     for (int i = 0; i < outputNodeIds.size(); i++) {
@@ -141,6 +131,12 @@ bool NeuralNetwork::contribute(double y, double p) {
     // The contributions map acts as your "visited" set and also stores each node's
     // computed contribution so it is not recomputed if reached by multiple paths.
 
+    contributions.clear(); 
+    for (int id : inputNodeIds){
+        visitContributeStart(id);
+        //contributions[id] = nodes[id]->postActivationValue; 
+        contribute(id, y, p); 
+    }
 
     flush();
 
@@ -165,8 +161,29 @@ double NeuralNetwork::contribute(int nodeId, const double& y, const double& p) {
         outgoingContribution = -1 * ((y - p) / (p * (1 - p)));
     }
 
-    // Before returning, store outgoingContribution in the contributions map.
+    //contributions is a glorified visited map :P
+    if (contributions.count(nodeId)){
+        return contributions[nodeId]; 
+    }
 
+    //holy shit 
+
+    //visitContributeNode initializes the outgoingContribution of the nodeId that calls contribute()
+    visitContributeNode(nodeId, outgoingContribution);
+    
+
+    //DFT, update the outgoing contribution for each node after the node that calls contribute()
+    //It takes the incomingContribution of the next node (so starting at the output nodes) and updates
+    //  outgoingContribution through backpropagation 
+    for (auto& connection : adjacencyList[nodeId]){
+        incomingContribution = contribute(connection.second.dest, y, p);
+        visitContributeNeighbor(connection.second, incomingContribution, outgoingContribution);
+    }
+
+    
+
+    // Before returning, store outgoingContribution in the contributions map.
+    contributions[nodeId] = outgoingContribution; 
     return outgoingContribution;
 }
 // STUDENT TODO: IMPLEMENT
@@ -181,7 +198,19 @@ bool NeuralNetwork::update() {
     // bias update: bias = bias - (learningRate * delta)
     // weight update: weight = weight - (learningRate * delta)
     // reset the delta term for each node and connection to zero.
+
+    for (NodeInfo* node : nodes){
+        node->bias -= learningRate * node->delta;
+        node->delta = 0;
+    }
     
+    for (auto& node : adjacencyList){
+        for (auto& connection : node){
+            connection.second.weight -= learningRate * connection.second.delta; 
+            connection.second.delta = 0; 
+        }
+    }
+
     flush();
     return true;
     
