@@ -43,6 +43,9 @@ vector<int> NeuralNetwork::getOutputNodeIds() const {
 }
 
 // STUDENT TODO: IMPLEMENT
+
+//ryan - june 4
+//so the BST works fine up until the very end where it visits the output nodes twice 
 vector<double> NeuralNetwork::predict(DataInstance instance) {
 
     vector<double> input = instance.x;
@@ -66,7 +69,13 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
 
     for (int i = 0; i < inputNodeIds.size(); i++) {
         nodes[inputNodeIds[i]]->postActivationValue = input[i];
+        nodes[inputNodeIds[i]]->preActivationValue = input[i]; 
     }
+
+    /*for (int inputID : inputNodeIds){
+        nodes[inputID]->postActivationValue = input[inputID];
+        nodes[inputID]->preActivationValue = input[inputID];
+    }*/
 
     //SECOND: Main implementation of BFT, a majority from lectures or practice quizzess
 
@@ -76,9 +85,8 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
 
     //unlike the practice quizzes where we set a source as visited immediately, here we are gonna set the input nodes as visited
     for (int i = 0; i < inputNodeIds.size(); i++) {
-        visited[inputNodeIds[i]] = true;
+        //visited[inputNodeIds[i]] = true;
         q.push(inputNodeIds[i]);
-        
     }
 
     //while the queue is not empty
@@ -95,8 +103,8 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
 
         for (auto& v: adjacencyList[u]) {
             Connection& c = v.second; //kind of a shortcut instead of just spamming v.second
-            visitPredictNeighbor(c);
             if (!visited[c.dest]) {
+                visitPredictNeighbor(c);
                 q.push(c.dest);
             }
 
