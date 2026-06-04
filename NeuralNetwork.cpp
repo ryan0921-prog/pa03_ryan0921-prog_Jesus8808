@@ -86,7 +86,8 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
 
     //unlike the practice quizzes where we set a source as visited immediately, here we are gonna set the input nodes as visited
     for (int i = 0; i < inputNodeIds.size(); i++) {
-        //visited[inputNodeIds[i]] = true;
+        visited[inputNodeIds[i]] = true;
+        //visitPredictNode(inputNodeIds[i]);
         q.push(inputNodeIds[i]);
     }
 
@@ -107,7 +108,6 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
             if (!visited[c.dest]) {
                 q.push(c.dest);
                 visitPredictNeighbor(c);
-
             }
         }
     }
@@ -142,7 +142,7 @@ bool NeuralNetwork::contribute(double y, double p) {
 
     contributions.clear(); 
     for (int id : inputNodeIds){
-        visitContributeStart(id);
+        //visitContributeStart(id);
         //contributions[id] = nodes[id]->postActivationValue; 
         contribute(id, y, p); 
     }
@@ -162,6 +162,11 @@ double NeuralNetwork::contribute(int nodeId, const double& y, const double& p) {
     NodeInfo* currNode = nodes.at(nodeId);
 
     // If this node is already in the contributions map, return its stored value immediately.
+    //contributions is a glorified visited map :P
+    if (contributions.count(nodeId)){
+        return contributions[nodeId]; 
+    }
+
 
     if (adjacencyList.at(nodeId).empty()) {
         // Base case: output node (no outgoing connections).
@@ -172,15 +177,9 @@ double NeuralNetwork::contribute(int nodeId, const double& y, const double& p) {
         //return contributions[nodeId];
     }
 
-    //contributions is a glorified visited map :P
-    if (contributions.count(nodeId)){
-        return contributions[nodeId]; 
-    }
-
     //holy shit 
 
-    //visitContributeNode initializes the outgoingContribution of the nodeId that calls contribute()
-    if (find(inputNodeIds.begin(), inputNodeIds.end(), nodeId) == inputNodeIds.end()) visitContributeNode(nodeId, outgoingContribution);
+    
     
 
     //DFT, update the outgoing contribution for each node after the node that calls contribute()
@@ -191,7 +190,8 @@ double NeuralNetwork::contribute(int nodeId, const double& y, const double& p) {
         visitContributeNeighbor(connection.second, incomingContribution, outgoingContribution);
     }
 
-    
+    //visitContributeNode initializes the outgoingContribution of the nodeId that calls contribute()
+    if (find(inputNodeIds.begin(), inputNodeIds.end(), nodeId) == inputNodeIds.end()) visitContributeNode(nodeId, outgoingContribution);
 
     // Before returning, store outgoingContribution in the contributions map.
     contributions[nodeId] = outgoingContribution; 
