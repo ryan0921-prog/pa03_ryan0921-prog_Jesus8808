@@ -1,6 +1,7 @@
 // includes
 #include "NeuralNetwork.hpp"
 #include "Trace.hpp"
+#include <algorithm> 
 using namespace std;
 
 
@@ -104,10 +105,10 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
         for (auto& v: adjacencyList[u]) {
             Connection& c = v.second; //kind of a shortcut instead of just spamming v.second
             if (!visited[c.dest]) {
-                visitPredictNeighbor(c);
                 q.push(c.dest);
-            }
+                visitPredictNeighbor(c);
 
+            }
         }
     }
 
@@ -167,6 +168,8 @@ double NeuralNetwork::contribute(int nodeId, const double& y, const double& p) {
         // Seeds the backward pass with the initial error signal.
         // You do not need to understand this derivation.
         outgoingContribution = -1 * ((y - p) / (p * (1 - p)));
+        //contributions[nodeId] = outgoingContribution; 
+        //return contributions[nodeId];
     }
 
     //contributions is a glorified visited map :P
@@ -177,7 +180,7 @@ double NeuralNetwork::contribute(int nodeId, const double& y, const double& p) {
     //holy shit 
 
     //visitContributeNode initializes the outgoingContribution of the nodeId that calls contribute()
-    visitContributeNode(nodeId, outgoingContribution);
+    if (find(inputNodeIds.begin(), inputNodeIds.end(), nodeId) == inputNodeIds.end()) visitContributeNode(nodeId, outgoingContribution);
     
 
     //DFT, update the outgoing contribution for each node after the node that calls contribute()

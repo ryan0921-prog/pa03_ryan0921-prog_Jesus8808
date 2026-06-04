@@ -33,7 +33,6 @@
 {"type":"node_state","step":0,"phase":"forward","id":5,"pre":49.53945134,"post":1,"bias":0.1,"delta":0,"highlight":"current"}
 {"type":"node_state","step":0,"phase":"backward","id":0,"pre":-2.790169183,"post":-2.790169183,"bias":0,"delta":0,"highlight":"stack"}
 {"type":"node_state","step":0,"phase":"backward","id":0,"pre":-2.790169183,"post":-2.790169183,"bias":0,"delta":0,"highlight":"stack"}
-{"type":"node_state","step":0,"phase":"backward","id":0,"pre":-2.790169183,"post":-2.790169183,"bias":0,"delta":0,"highlight":"current"}
 {"type":"node_state","step":0,"phase":"backward","id":4,"pre":-4.920769308,"post":0,"bias":3.9,"delta":0,"highlight":"stack"}
 {"type":"node_state","step":0,"phase":"backward","id":4,"pre":-4.920769308,"post":0,"bias":3.9,"delta":0,"highlight":"current"}
 {"type":"node_state","step":0,"phase":"backward","id":5,"pre":49.53945134,"post":1,"bias":0.1,"delta":0,"highlight":"stack"}
@@ -58,7 +57,6 @@
 {"type":"node_state","step":0,"phase":"backward","id":0,"pre":-2.790169183,"post":-2.790169183,"bias":0,"delta":0,"highlight":"neighbor"}
 {"type":"node_state","step":0,"phase":"backward","id":1,"pre":2.438542822,"post":2.438542822,"bias":0,"delta":0,"highlight":"stack"}
 {"type":"node_state","step":0,"phase":"backward","id":1,"pre":2.438542822,"post":2.438542822,"bias":0,"delta":0,"highlight":"stack"}
-{"type":"node_state","step":0,"phase":"backward","id":1,"pre":2.438542822,"post":2.438542822,"bias":0,"delta":0,"highlight":"current"}
 {"type":"node_state","step":0,"phase":"backward","id":4,"pre":-4.920769308,"post":0,"bias":3.9,"delta":0,"highlight":"stack"}
 {"type":"edge_state","step":0,"phase":"backward","source":1,"dest":4,"weight":-1.1,"delta":nan}
 {"type":"node_state","step":0,"phase":"backward","id":1,"pre":2.438542822,"post":2.438542822,"bias":0,"delta":0,"highlight":"neighbor"}
