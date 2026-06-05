@@ -1,3 +1,7 @@
+//Ryan Sun and Jesus Santibanez 
+//A4X1938,     A426C84 
+
+
 #include <iostream>
 #include "NeuralNetwork.hpp"
 #include "utility.hpp"
