@@ -96,18 +96,16 @@ vector<double> NeuralNetwork::predict(DataInstance instance) {
         int u = q.front();
         q.pop();
 
-        if (!visited[u]) {
-            visitPredictNode(u);
-            visited[u] = true;
-        }
+        visitPredictNode(u);        //corrected: should occur for every enqueued node
 
         //using the neighbor loop from practice quizzes but with outgoing connectionss
 
         for (auto& v: adjacencyList[u]) {
-            Connection& c = v.second; //kind of a shortcut instead of just spamming v.second
+            Connection& c = v.second;       //kind of a shortcut instead of just spamming v.second
+            visitPredictNeighbor(c);        //corrected: should occur for every neighbor of a node, regardless if it's visited/going to be enqueued 
             if (!visited[c.dest]) {
+                visited[c.dest] = true; 
                 q.push(c.dest);
-                visitPredictNeighbor(c);
             }
         }
     }
@@ -179,8 +177,6 @@ double NeuralNetwork::contribute(int nodeId, const double& y, const double& p) {
 
     //holy shit 
 
-    
-    
 
     //DFT, update the outgoing contribution for each node after the node that calls contribute()
     //It takes the incomingContribution of the next node (so starting at the output nodes) and updates
